@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>菜鸟教程 React 实例</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/javascript">
+
+    let Rectangle = class {
+        constructor(height, width) {
+            this.height = height;
+            this.width = width;
+        }
+    };
+
+    let Rectangle2 = class Rectangle2 {
+        constructor(height, width) {
+            this.height = height;
+            this.width = width;
+        }
+    };
+//    function obj() {
+//        this.fn = function() {
+//            alert("ok");
+//            setTimeout((function(a,b){
+//                return function(){
+//                    b.call(a);
+//                }
+//            })(this,this.fn), 1000);//模拟Function.prototype.bind
+//        }
+//    }
+//    var o = new obj();
+//    o.fn();
+//    function obj() {
+//        this.fn = function() {
+//            var that = this;//保存当前对象this
+//            alert("ok");
+//            setTimeout(function(){
+//                that.fn();
+//            }, 1000);//通过闭包得到当前作用域，好访问保存好的对象that
+//        }
+//    }
+//    var o = new obj();
+//    o.fn();
+</script>
+<script type="text/babel"  >
+
+    class Toggle extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {isToggleOn: true};
+
+            // This binding is necessary to make `this` work in the callback
+            //this.handleClick = this.handleClick.bind(this);
+        }
+
+        handleClick=function() {
+            this.setState(prevState => ({
+                isToggleOn: !prevState.isToggleOn
+            }));
+        }.bind(this)
+
+        render() {
+            return (
+                    <button onClick={this.handleClick}>
+                        {this.state.isToggleOn ? 'ON' : 'OFF'}
+                    </button>
+            );
+        }
+    }
+    var TTt =  React.createClass({
+        getInitialState:function() {
+            return {
+                isToggleOn: true
+            };
+
+
+        },
+        handleClick:function() {
+            this.setState(prevState => ({
+                isToggleOn: !prevState.isToggleOn
+            }));
+        },
+
+        render:function() {
+            return (
+                    <button onClick={this.handleClick}>
+                        {this.state.isToggleOn ? 'ON' : 'OFF'}
+                    </button>
+            );
+        }
+    });
+
+
+    class Clock extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {date: new Date()};
+        }
+        componentDidMount=function () {
+          //  console.log(this);
+            this.timerID = setInterval(
+                function () {
+                    return this.tick();
+                }.bind(this),
+              1000
+            );
+        }
+//        componentDidMount() {
+//            this.timerID = setInterval(
+//                () => this.tick(),
+//                1000
+//            );
+//        }
+
+        componentWillUnmount() {
+            clearInterval(this.timerID);
+        }
+
+        tick() {
+            this.setState({
+                date: new Date()
+            });
+        }
+
+        render() {
+            return (
+                    <div>
+                        <h1>Hello, world!</h1>
+                        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+                    </div>
+            );
+        }
+    }
+    class Post extends React.Component {
+        constructor(props) {
+            super(props);
+
+        }
+        render() {
+            return (
+                    <div>
+                        <h2>It is {this.props.id}.</h2>
+                    </div>
+            );
+        }
+    }
+    const posts = [
+        {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+        {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+    ];
+
+    const content = posts.map((post) =>
+            <Post
+                    key={post.id}
+                    id={post.id}
+                    title={post.title} />
+    );
+    ReactDOM.render(
+        <div>
+            <Clock />
+            <Toggle />
+            <TTt/>
+            {content}
+        </div>
+        ,
+        document.getElementById('root')
+    );
+
+</script>
+</body>
+</html>
+
