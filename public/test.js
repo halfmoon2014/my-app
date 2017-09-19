@@ -31,6 +31,7 @@ var TopView = React.createClass({
     }
 });
 
+
 var ContentView=React.createClass({
     getInitialState: function() {
         return {
@@ -124,6 +125,15 @@ var ContentView=React.createClass({
 });
 
 var View = React.createClass({
+    getDefaultProps : function () {
+        return {
+            title : 'Hello World'
+        };
+    },
+    propTypes: {
+        source: React.PropTypes.number.isRequired,
+        title: React.PropTypes.string.isRequired,
+    },
     getInitialState: function() {
         return {
             pageSize: 10
@@ -137,6 +147,11 @@ var View = React.createClass({
     render: function() {
         return (
             <div>
+                <span>{this.props.title}</span>
+                <NotesList>
+                    <span>hello</span>
+                    <span>world</span>
+                </NotesList>
                 <TopView callbackParent={this.changPageSize} pageSize={this.state.pageSize} />
                 <ContentView source={this.props.source} promise={$.getJSON(this.props.url)} pageSize={this.state.pageSize}  />
             </div>
@@ -144,7 +159,13 @@ var View = React.createClass({
     }
 });
 
+var source="https://api.github.com/users/octocat/gists";
+var url="https://api.github.com/search/repositories?q=javascript&sort=stars"
+const element=<h1>Hello, world!</h1>;
 ReactDOM.render(
-    <View source="https://api.github.com/users/octocat/gists" url="https://api.github.com/search/repositories?q=javascript&sort=stars"   />,
+    <div>
+    {element}
+        <View source={source} url={url}   />
+    </div>,
     document.getElementById('example')
 );
