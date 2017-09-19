@@ -15,13 +15,13 @@ const user = {
 };
 //const  title = response.potentiallyMaliciousInput;
 // // 直接使用是安全的：
-// const element = <h1>{title}</h1>;
+//const element = <h1>{title}</h1>;
 
-// const element = (
-//     <h1>
-//         Hello, {getGreeting()}!
-//     </h1>
-// );
+const element = (
+    <h1>
+         {getGreeting()}
+    </h1>
+);
 // const element = React.createElement(
 //     'h1',
 //     {className: 'greeting'},
@@ -44,83 +44,81 @@ const user = {
 //         document.getElementById("root")
 //     )
 // }
-// setInterval(tick,100);
+//  setInterval(tick,100);
 
 // class Welcome extends React.Component {
 //     render() {
 //         return <h1>Hello, {this.props.name}</h1>;
 //     }
 // }
-// function Welcome(props) {
-//     return <h1>Hello, {props.name}</h1>;
-// }
-//
-// const element = <Welcome name="Sara" />;
+function Welcome(props) {
+    return <h1>Hello, {props.name}</h1>;
+}
+
+const element2 = <Welcome name="Sara" />;
 // ReactDOM.render(
 //     element,
 //     document.getElementById('root')
 // );
-// function Welcome(props) {
-//     return <h1>Hello, {props.name}</h1>;
-// }
-//
-// function App() {
-//     return (
-//         <div>
-//             <Welcome name="Sara" />
-//             <Welcome name="Cahal" />
-//             <Welcome name="Edite" />
-//         </div>
-//     );
-// }
+
+
+function App() {
+    return (
+        <div>
+            <Welcome name="Sara" />
+            <Welcome name="Cahal" />
+            <Welcome name="Edite" />
+        </div>
+    );
+}
 //
 // ReactDOM.render(
 //     <App />,
 //     document.getElementById('root')
 // );
 //
-// function Avatar(props) {
-//     return (
-//         <img className="Avatar"
-//              src={props.user.avatarUrl}
-//              alt={props.user.name}
-//         />
-//     );
-// }
-// function UserInfo(props) {
-//     return (
-//         <div className="UserInfo">
-//             <Avatar user={props.user} />
-//             <div className="UserInfo-name">
-//                 {props.user.name}
-//             </div>
-//         </div>
-//     );
-// }
-// function Comment(props) {
-//     return (
-//         <div className="Comment">
-//             <UserInfo user={props.author} />
-//             <div className="Comment-text">
-//                 {props.text}
-//             </div>
-//             <div className="Comment-date">
-//                 {formatDate(props.date)}
-//             </div>
-//         </div>
-//     );
-// }
-// function formatDate(date) {
-//     return date.toLocaleDateString();
-// }
-// const comment = {
-//     date: new Date(),
-//     text: 'I hope you enjoy learning React!',
-//     author: {
-//         name: 'Hello Kitty',
-//         avatarUrl: 'http://placekitten.com/g/64/64'
-//     }
-// };
+function Avatar(props) {
+    return (
+        <img className="Avatar"
+             src={props.user.avatarUrl}
+             alt={props.user.name}
+        />
+    );
+}
+function UserInfo(props) {
+    return (
+        <div className="UserInfo">
+            <Avatar user={props.user} />
+            <div className="UserInfo-name">
+                {props.user.name}
+            </div>
+        </div>
+    );
+}
+function Comment(props) {
+    return (
+        <div className="Comment">
+            <UserInfo user={props.author} />
+            <div className="Comment-text">
+                {props.text}
+            </div>
+            <div className="Comment-date">
+                {formatDate(props.date)}
+            </div>
+        </div>
+    );
+}
+function formatDate(date) {
+    return date.toLocaleDateString();
+}
+const comment = {
+    date: new Date(),
+    text: 'I hope you enjoy learning React!',
+    author: {
+        name: 'Hello Kitty',
+        avatarUrl: 'http://placekitten.com/g/64/64'
+    }
+};
 //
 // ReactDOM.render(
 //     <Comment
@@ -275,13 +273,27 @@ class FilterableProductTable extends React.Component {
             filterText: '',
             inStockOnly: false
         };
+        this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
+        this.handleInStockOnlyChange = this.handleInStockOnlyChange.bind(this)
     }
+
+    handleFilterTextChange(filterText) {
+        this.setState({filterText: filterText});
+    }
+
+    handleInStockOnlyChange(inStockOnly) {
+        this.setState({inStockOnly: inStockOnly});
+    }
+
     render() {
         return (
             <div>
                 <SearchBar
                     filterText={this.state.filterText}
                     inStockOnly={this.state.inStockOnly}
+                    onFilterTextChange={this.handleFilterTextChange}
+                    onInStockOnlyChange={this.handleInStockOnlyChange}
+
                 />
                 <ProductTable products={this.props.products}
                               filterText={this.state.filterText}
@@ -292,13 +304,37 @@ class FilterableProductTable extends React.Component {
     }
 }
 
+var PRODUCTS = [
+    {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+    {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+    {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+    {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+    {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+    {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+
 class SearchBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+        this.handleInStockOnlyChange = this.handleInStockOnlyChange.bind(this);
+    }
+
+    handleFilterTextChange(e) {
+        this.props.onFilterTextChange(e.target.value)
+    }
+
+    handleInStockOnlyChange(e) {
+        this.props.onInStockOnlyChange(e.target.checked);
+    }
+
     render() {
         return (
             <form>
-                <input type="text" placeholder="Search..."/>
+                <input type="text" value={this.props.filterText} placeholder="Search..."
+                       onChange={this.handleFilterTextChange}/>
                 <p>
-                    <input type="checkbox"/>
+                    <input type="checkbox" checked={this.props.inStockOnly} onChange={this.handleInStockOnlyChange}/>
                     {' '}
                     Only show products in stock
                 </p>
@@ -311,13 +347,16 @@ class ProductTable extends React.Component {
     render() {
         var rows = [];
         var lastCategory = null;
-        this.props.products.forEach(function(product) {
-            if (product.category !== lastCategory) {
-                rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
+        this.props.products.forEach(function (product) {
+            if (product.name.indexOf(this.props.filterText) === -1 ||  (!product.stocked && this.props.inStockOnly)) {
+                return;
             }
-            rows.push(<ProductRow product={product} key={product.name} />);
+            if (product.category !== lastCategory) {
+                rows.push(<ProductCategoryRow category={product.category} key={product.category}/>);
+            }
+            rows.push(<ProductRow product={product} key={product.name}/>);
             lastCategory = product.category;
-        });
+        }.bind(this));
         return (
             <table>
                 <thead>
@@ -334,7 +373,9 @@ class ProductTable extends React.Component {
 
 class ProductCategoryRow extends React.Component {
     render() {
-        return <tr><th colSpan="2">{this.props.category}</th></tr>;
+        return <tr>
+            <th colSpan="2">{this.props.category}</th>
+        </tr>;
     }
 }
 
@@ -356,6 +397,17 @@ class ProductRow extends React.Component {
 
 
 ReactDOM.render(
-    <Calculator/>,
+    <div>
+        {element}
+        {element2}
+        <App/>
+             <Comment
+                 date={comment.date}
+                 text={comment.text}
+                 author={comment.author} />
+        <Clock/>
+        <Calculator/>
+        <FilterableProductTable products={PRODUCTS}/>
+    </div>,
     document.getElementById('root')
 );

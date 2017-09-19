@@ -11,22 +11,7 @@
 <body>
 <div id="example"></div>
 <div id="root"></div>
-<script type="text/babel">
-    var NotesList = React.createClass({
-        render: function() {
-            return (
-                    <ol>
-                        {
-                            React.Children.map(this.props.children, function (child) {
-                                return <li>{child}</li>;
-                            })
-                        }
-                    </ol>
-            );
-        }
-    });
 
-</script>
-<script type="text/babel"  src="test.js"  />
+<script type="text/babel"  src="test2.js"  />
 </body>
 </html>

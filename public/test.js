@@ -31,6 +31,29 @@ var TopView = React.createClass({
     }
 });
 
+var Clock=React.createClass({
+    getInitialState: function() {
+        return {
+            date: new Date()
+        };
+    },
+    componentDidMount:function () {
+        this.timerID=setInterval(this.setTime,100);
+    },
+    componentWillUnmount:function () {
+        clearInterval(this.timerID);
+    },
+    setTime:function () {
+        this.setState({date:new Date()});
+    },
+    render:function () {
+        return(
+            <div>
+                {this.state.date.toLocaleTimeString()}
+            </div>
+        )
+    }
+})
 
 var ContentView=React.createClass({
     getInitialState: function() {
@@ -42,8 +65,19 @@ var ContentView=React.createClass({
     },
     componentDidMount() {
 
-        this.props.promise.then(
+        var promise=$.getJSON(this.props.url)
 
+        // var promise=fetch(this.props.url,{
+        //     method: 'GET',
+        //     mode: 'cors',
+        //     //credentials: 'include',
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     }
+        // }).then(function(response) {
+        //      return response.json();
+        //  })
+        promise.then(
             value => this.setState({loading: false, data: value}),
 
             error => this.setState({loading: false, error: error}));
@@ -76,7 +110,7 @@ var ContentView=React.createClass({
     //     }.bind(this));
     // },
     componentWillUnmount: function() {
-        this.serverRequest.abort();
+        //this.serverRequest.abort();
     },
     render: function() {
         if (this.state.loading) {
@@ -92,6 +126,7 @@ var ContentView=React.createClass({
         }
         else {
             var pageSize=this.props.pageSize;
+            console.log(this.state.data)
             var repoList = this.state.data.items.map(function (repo, index) {
                 if(index>=pageSize){
 
@@ -153,19 +188,20 @@ var View = React.createClass({
                     <span>world</span>
                 </NotesList>
                 <TopView callbackParent={this.changPageSize} pageSize={this.state.pageSize} />
-                <ContentView source={this.props.source} promise={$.getJSON(this.props.url)} pageSize={this.state.pageSize}  />
+                <ContentView  url={this.props.url}  pageSize={this.state.pageSize}  />
             </div>
         );
     }
 });
 
-var source="https://api.github.com/users/octocat/gists";
+
 var url="https://api.github.com/search/repositories?q=javascript&sort=stars"
 const element=<h1>Hello, world!</h1>;
 ReactDOM.render(
     <div>
     {element}
-        <View source={source} url={url}   />
+    <Clock/>
+        <View  url={url}   />
     </div>,
     document.getElementById('example')
 );
