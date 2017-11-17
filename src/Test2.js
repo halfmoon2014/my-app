@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 function formatName(user) {
     return user.firstName + ' ' + user.lastName;
 }
@@ -163,12 +164,7 @@ class Clock extends React.Component {
 }
 
 
-function tickgo() {
-    ReactDOM.render(
-        <Clock/>,
-        document.getElementById('root')
-    );
-}
+
 
 //tickgo();
 //setInterval(tick, 1000);
@@ -231,8 +227,8 @@ function BoilingVerdict(props) {
 class Calculator extends React.Component {
     constructor(props) {
         super(props);
-        this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
-        this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+        // this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+        // this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
         this.state = {temperature: '0', scale: 'c'};
     }
 
@@ -254,11 +250,11 @@ class Calculator extends React.Component {
                 <TemperatureInput
                     scale="c"
                     temperature={celsius}
-                    onTemperatureChange={this.handleCelsiusChange}/>
+                    onTemperatureChange={this.handleCelsiusChange.bind(this)}/>
                 <TemperatureInput
                     scale="f"
                     temperature={fahrenheit}
-                    onTemperatureChange={this.handleFahrenheitChange}/>
+                    onTemperatureChange={this.handleFahrenheitChange.bind(this)}/>
                 <BoilingVerdict
                     celsius={parseFloat(celsius)}/>
             </div>
@@ -394,20 +390,43 @@ class ProductRow extends React.Component {
         );
     }
 }
+class PApp2 extends  Component{
+    render(){
+        return(
+            <div>
+                <Clock/>
+                {element}
+                {element2}
+                <App/>
+                <Comment
+                    date={comment.date}
+                    text={comment.text}
+                    author={comment.author} />
+                <Clock/>
+                <Calculator/>
+                <FilterableProductTable products={PRODUCTS}/>
+            </div>
+        );
+    }
+};
 
 
-ReactDOM.render(
-    <div>
-        {element}
-        {element2}
-        <App/>
-             <Comment
-                 date={comment.date}
-                 text={comment.text}
-                 author={comment.author} />
-        <Clock/>
-        <Calculator/>
-        <FilterableProductTable products={PRODUCTS}/>
-    </div>,
-    document.getElementById('root')
-);
+
+
+export default PApp2;
+
+// ReactDOM.render(
+//     <div>
+//         {element}
+//         {element2}
+//         <App/>
+//              <Comment
+//                  date={comment.date}
+//                  text={comment.text}
+//                  author={comment.author} />
+//         <Clock/>
+//         <Calculator/>
+//         <FilterableProductTable products={PRODUCTS}/>
+//     </div>,
+//     document.getElementById('root')
+// );
